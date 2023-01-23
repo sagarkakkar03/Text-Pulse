@@ -117,11 +117,11 @@ if uploaded_file is not None:
             plt.imshow(df_wc)
             st.pyplot(fig)
         if selected == "Contribution":
-        # Most Positive, Negitive, Neutral user...
+        # Most Positive, Negative, Neutral user...
             if selected_user == 'Overall':
             #    col1, col2, col3 = st.columns(3)
             #    with col1:
-                    st.markdown("<h3 style='text-align: center; color: orange;'>Most Positive Users</h3>",unsafe_allow_html=True)
+                    st.markdown("<h3 style='text-align: center; color: green;'>Most Positive Users</h3>",unsafe_allow_html=True)
                     af = df['user'][df['value'] == 1]
                     x = af.value_counts()
                     fig = px.bar(af, y=x.values, x=x.index, color=x)
@@ -133,7 +133,7 @@ if uploaded_file is not None:
                     fig = px.bar(af, y=x.values, x=x.index, color=x)
                     fig
             #    with col3:
-                    st.markdown("<h3 style='text-align: center; color: green;'>Most Negitive Users</h3>",unsafe_allow_html=True)
+                    st.markdown("<h3 style='text-align: center; color: red;'>Most Negative Users</h3>",unsafe_allow_html=True)
                     af = df['user'][df['value'] == -1]
                     x = af.value_counts()
                     fig = px.bar(af, y=x.values, x=x.index, color=x)
