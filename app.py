@@ -167,7 +167,7 @@ if uploaded_file is not None:
                     pass
             #with col3:
                 try:
-                    st.markdown("<h3 style='text-align: center; color: green;'>Most Negitive words</h3>",
+                    st.markdown("<h3 style='text-align: center; color: red;'>Most Negative words</h3>",
                                 unsafe_allow_html=True)
                     most_common_df = Helper.most_common_words(selected_user, df, -1)
                     fig, ax = plt.subplots()
