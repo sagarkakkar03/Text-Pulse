@@ -50,13 +50,8 @@ def most_common_words(selected_user, df, k):
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
     from nltk.sentiment.vader import SentimentIntensityAnalyzer
-    def sentiment(d):
-        if d["pos"] >= d["neg"] and d["pos"] >= d["nu"]:
-            return 1
-        if d["neg"] >= d["pos"] and d["neg"] >= d["nu"]:
-            return -1
-        if d["nu"] >= d["pos"] and d["nu"] >= d["neg"]:
-            return 0
+    import emoji
+    from collections import Counter
     emojis = []
     for message in df['message']:
         emojis.extend([c for c in message if c in emoji.UNICODE_EMOJI['en']])
@@ -65,36 +60,28 @@ def most_common_words(selected_user, df, k):
     words = []
     f = open('stop_hinglish.txt', 'r')
     stop_words = f.read()
-    m = []
-    for i in temp['message']:
-        if i !=' \n':
-            m.append(i)
-    df2 = pd.DataFrame({'message': m})
-    sentiments = SentimentIntensityAnalyzer()
-    df2["pos"] = [sentiments.polarity_scores(i)["pos"] for i in df2["message"]]  # Positive
-    df2["neg"] = [sentiments.polarity_scores(i)["neg"] for i in df2["message"]]  # Negative
-    df2["nu"] = [sentiments.polarity_scores(i)["neu"] for i in df2["message"]]
-    df2['value'] = df2.apply(lambda row: sentiment(row), axis=1)
-    for message in df2['message'][df2['value'] == k]:
+    for message in temp['message']:
         for word in message.lower().split():
-            if word not in stop_words :
-                new_word = ''
-                for i in word:
-                    if i not in emojis and i !=' ':
-                        new_word+=i
-                    else:
-                        pass
-                if new_word!= '' and new_word!=' ' and new_word not in emojis:
-                    words.append(new_word)
-    most_common_df = pd.DataFrame(Counter(words).most_common(20))
-    if most_common_df.shape != (0,0):
-        number = []
-        for message in most_common_df[1]:
-            number.append(str(message))
-        most_common_df['number'] = number
-        most_common_df.rename(columns={0: 'word'}, inplace=True)
-        del most_common_df[1]
-    return most_common_df
+            if word not in stop_words and word not in emojis:
+                words.append(word)
+    most_common_df = pd.DataFrame(Counter(words).most_common())
+    number = []
+    for message in most_common_df[1]:
+        number.append(str(message))
+    most_common_df['number'] = number
+    most_common_df.rename(columns={0: 'word'}, inplace=True)
+    del most_common_df[1]
+    sentiments = SentimentIntensityAnalyzer()
+    most_common_df["pos"] = [sentiments.polarity_scores(i)["pos"] for i in most_common_df["word"]]  # Positive
+    most_common_df["neg"] = [sentiments.polarity_scores(i)["neg"] for i in most_common_df["word"]]  # Negative
+    most_common_df["nu"] = [sentiments.polarity_scores(i)["neu"] for i in most_common_df["word"]]
+    if k == 0:
+        df = most_common_df[most_common_df['nu'] == 1].head(20)
+    elif k == 1:
+        df = most_common_df[most_common_df['pos'] == 1].head(20)
+    else:
+        df = most_common_df[most_common_df['neg'] == 1].head(20)
+    return df
 def emoji_helper(selected_user,df):
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
