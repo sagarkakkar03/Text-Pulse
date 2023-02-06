@@ -1,5 +1,4 @@
 import nltk
-import streamlit as st
 import pandas as pd
 import preprocessor
 import Helper
@@ -53,8 +52,9 @@ if uploaded_file is not None:
     df["nu"] = [sentiments.polarity_scores(i)["neu"] for i in df["message"]]
     df['value'] = df.apply(lambda row: sentiment(row), axis=1)
     st.dataframe(df)
-
-
+    def sentiment2(d):
+        return d["pos"] - d["neg"]
+    df['score'] = df.apply(lambda row: sentiment2(row), axis=1)
     # fetch unique user
     user_list = df['user'].unique().tolist()
     user_list.remove('group_notification')
@@ -112,32 +112,44 @@ if uploaded_file is not None:
 
         # WordCloud
         if selected == 'Wordcloud':
-            df_wc = Helper.create_wordcloud(selected_user, df)
-            fig, ax = plt.subplots()
-            plt.imshow(df_wc)
-            st.pyplot(fig)
+            try:
+                df_wc = Helper.create_wordcloud(selected_user, df)
+                fig, ax = plt.subplots()
+                plt.imshow(df_wc)
+                st.pyplot(fig)
+            except :
+                pass
         if selected == "Contribution":
         # Most Positive, Negative, Neutral user...
             if selected_user == 'Overall':
             #    col1, col2, col3 = st.columns(3)
             #    with col1:
+                try:
                     st.markdown("<h3 style='text-align: center; color: green;'>Most Positive Users</h3>",unsafe_allow_html=True)
                     af = df['user'][df['value'] == 1]
                     x = af.value_counts()
                     fig = px.bar(af, y=x.values, x=x.index, color=x)
                     fig
+                except:
+                    pass
             #    with col2:
+                try:
                     st.markdown("<h3 style='text-align: center; color: blue;'>Most Neutral Users</h3>",unsafe_allow_html=True)
                     af = df['user'][df['value'] == 0]
                     x = af.value_counts()
                     fig = px.bar(af, y=x.values, x=x.index, color=x)
                     fig
+                except:
+                    pass
             #    with col3:
+                try:
                     st.markdown("<h3 style='text-align: center; color: red;'>Most Negative Users</h3>",unsafe_allow_html=True)
                     af = df['user'][df['value'] == -1]
                     x = af.value_counts()
                     fig = px.bar(af, y=x.values, x=x.index, color=x)
                     fig
+                except:
+                    pass
         # most common words
         if selected == 'Words':
             #col1, col2, col3 = st.columns(3)
@@ -174,6 +186,14 @@ if uploaded_file is not None:
                     word = most_common_df['word']
                     number = most_common_df['number']
                     fig = px.bar(most_common_df, y=number, x=word, color=word)
+                    fig
+                except:
+                    pass
+                
+                try:
+                    import plotly.express as px
+                    fig = px.scatter(df, x='Date', y='score', color='score');
+                    fig.update_yaxes(tickvals=[-1, 0, 1])
                     fig
                 except:
                     pass
