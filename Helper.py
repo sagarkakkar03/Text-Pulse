@@ -28,8 +28,10 @@ def most_busy_users(df):
 def create_wordcloud(selected_user, df):
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
-    temp = df[df['user'] != 'group_notification']
+    #temp = df[df['user'] != 'group_notification']
+    temp = df
     temp = temp[temp['message'] != '<Media omitted>\n']
+    temp = temp[temp['message'] != ' image omitted']
     f = open('stop_hinglish.txt', 'r')
     stop_words = f.read()
     def remove_stop_words(message):
