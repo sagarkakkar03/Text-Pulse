@@ -18,6 +18,17 @@ def preprocess(data):
         df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
         df['messages_date'] = pd.to_datetime(df['messages_date'])
         df.rename(columns={'messages_date': 'Date'}, inplace=True)
+        users = []
+        messages = []
+        # special character removal
+        for message in df['user_message']:
+            entry = re.split('\ ([\w\W]+?):\s', message)
+            if entry[1:]:
+                users.append(entry[1])
+                messages.append(entry[2])
+            else:
+                users.append('group_notification')
+                messages.append(entry[0])
     else:
         pattern = '\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\s\w\w\s'
         messages = re.split(pattern, data)[1:]
@@ -25,17 +36,17 @@ def preprocess(data):
         df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
         df['messages_date'] = pd.to_datetime(df['messages_date'], dayfirst=False)
         df.rename(columns={'messages_date': 'Date'}, inplace=True)
-    users = []
-    messages = []
-    #special character removal
-    for message in df['user_message']:
-        entry = re.split('\-\ ([\w\W]+?):\s', message)
-        if entry[1:]:
-            users.append(entry[1])
-            messages.append(entry[2])
-        else:
-            users.append('group_notification')
-            messages.append(entry[0])
+        users = []
+        messages = []
+        #special character removal
+        for message in df['user_message']:
+            entry = re.split('\-\ ([\w\W]+?):\s', message)
+            if entry[1:]:
+                users.append(entry[1])
+                messages.append(entry[2])
+            else:
+                users.append('group_notification')
+                messages.append(entry[0])
     special_characters = '''!()-[]{};:'"|\,<>./?@#$%^&*+_'''
     new_messages = []
     for i in range(len(messages)):
