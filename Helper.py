@@ -57,7 +57,7 @@ def most_common_words(selected_user, df, k):
     emojis = []
     for message in df['message']:
         emojis.extend([c for c in message if c in emoji.UNICODE_EMOJI['en']])
-    temp = df[df['user'] != 'group_notification']
+    temp = df
     temp = temp[temp['message'] != '<Media omitted>\n']
     words = []
     f = open('stop_hinglish.txt', 'r')
