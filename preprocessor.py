@@ -1,12 +1,30 @@
 def preprocess(data):
     import re
     import pandas as pd
-    pattern = '\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\s\w\w\s'
-    messages = re.split(pattern, data)[1:]
-    dates = re.findall(pattern, data)
-    df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
-    df['messages_date'] = pd.to_datetime(df['messages_date'], dayfirst=False)
-    df.rename(columns={'messages_date': 'Date'}, inplace=True)
+    if data[0] == '[':
+        pattern = '\[\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\:\d{1,2}\s\w\w\]'
+        messages = re.split(pattern, data)[1:]
+        dates = re.findall(pattern, data)
+        new_dates = []
+        for i in dates:
+            string = ''
+            for j in i:
+                if j == '[' or j == ']':
+                    pass
+                else:
+                    string += j
+            new_dates.append(string)
+        dates = new_dates
+        df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
+        df['messages_date'] = pd.to_datetime(df['messages_date'])
+        df.rename(columns={'messages_date': 'Date'}, inplace=True)
+    else:
+        pattern = '\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\s\w\w\s'
+        messages = re.split(pattern, data)[1:]
+        dates = re.findall(pattern, data)
+        df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
+        df['messages_date'] = pd.to_datetime(df['messages_date'], dayfirst=False)
+        df.rename(columns={'messages_date': 'Date'}, inplace=True)
     users = []
     messages = []
     #special character removal
@@ -44,12 +62,30 @@ def preprocess(data):
 def preprocess2(data):
     import re
     import pandas as pd
-    pattern = '\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\s\w\w\s'
-    messages = re.split(pattern, data)[1:]
-    dates = re.findall(pattern, data)
-    df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
-    df['messages_date'] = pd.to_datetime(df['messages_date'], dayfirst=False)
-    df.rename(columns={'messages_date': 'Date'}, inplace=True)
+    if data[0] == '[':
+        pattern = '\[\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\:\d{1,2}\s\w\w\]'
+        messages = re.split(pattern, data)[1:]
+        dates = re.findall(pattern, data)
+        new_dates = []
+        for i in dates:
+            string = ''
+            for j in i:
+                if j == '[' or j == ']':
+                    pass
+                else:
+                    string += j
+            new_dates.append(string)
+        dates = new_dates
+        df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
+        df['messages_date'] = pd.to_datetime(df['messages_date'])
+        df.rename(columns={'messages_date': 'Date'}, inplace=True)
+    else:
+        pattern = '\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\s\w\w\s'
+        messages = re.split(pattern, data)[1:]
+        dates = re.findall(pattern, data)
+        df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
+        df['messages_date'] = pd.to_datetime(df['messages_date'], dayfirst=False)
+        df.rename(columns={'messages_date': 'Date'}, inplace=True)
     users = []
     messages = []
     #special character removal
@@ -79,12 +115,30 @@ def preprocess3(data):
     import re
     import pandas as pd
     import emoji
-    pattern = '\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\s\w\w\s'
-    messages = re.split(pattern, data)[1:]
-    dates = re.findall(pattern, data)
-    df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
-    df['messages_date'] = pd.to_datetime(df['messages_date'], dayfirst=False)
-    df.rename(columns={'messages_date': 'Date'}, inplace=True)
+    if data[0] == '[':
+        pattern = '\[\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\:\d{1,2}\s\w\w\]'
+        messages = re.split(pattern, data)[1:]
+        dates = re.findall(pattern, data)
+        new_dates = []
+        for i in dates:
+            string = ''
+            for j in i:
+                if j == '[' or j == ']':
+                    pass
+                else:
+                    string += j
+            new_dates.append(string)
+        dates = new_dates
+        df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
+        df['messages_date'] = pd.to_datetime(df['messages_date'])
+        df.rename(columns={'messages_date': 'Date'}, inplace=True)
+    else:
+        pattern = '\d{1,2}/\d{1,2}/\d{2,4}\,\s\d{1,2}\:\d{1,2}\s\w\w\s'
+        messages = re.split(pattern, data)[1:]
+        dates = re.findall(pattern, data)
+        df = pd.DataFrame({'user_message': messages, 'messages_date': dates})
+        df['messages_date'] = pd.to_datetime(df['messages_date'], dayfirst=False)
+        df.rename(columns={'messages_date': 'Date'}, inplace=True)
     users = []
     messages = []
     #special character removal
